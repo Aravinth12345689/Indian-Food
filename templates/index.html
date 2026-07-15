@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Indian Food Recognition</title>
+</head>
+<body>
+
+<h2>Indian Food Recognition</h2>
+<form method="POST" enctype="multipart/form-data">
+
+    <input type="file" name="image" required>
+
+    <br><br>
+
+    <label><b>Select Feature</b></label>
+
+    <select name="feature" required>
+        <option value="">-- Select Feature --</option>
+        <option value="analysis">Food Analysis</option>
+        <option value="diet">Diet Recommendation</option>
+    </select>
+
+
+    <br><br>
+    <label><b>Select Diet Goal</b></label>
+
+    <select name="diet_goal">
+        <option value="">-- Select Diet Goal --</option>
+        <option value="weight_loss">Weight Loss</option>
+        <option value="weight_gain">Weight Gain</option>
+        <option value="muscle_gain">Muscle Gain</option>
+        <option value="diabetes">Diabetes</option>
+        <option value="heart_healthy">Heart Healthy</option>
+    </select>
+    <br><br>
+
+    <label><b>Height (cm)</b></label><br>
+    <input type="number" name="height" placeholder="Enter Height">
+
+    <br><br>
+
+    <label><b>Weight (kg)</b></label><br>
+    <input type="number" name="weight" placeholder="Enter Weight">
+
+
+
+    <br><br>
+
+    <button type="submit">
+        🔍 predict
+    </button>
+    <br><br>
+
+    <a href="/bmi">
+        <button type="button">
+            📏 BMI Calculator
+        </button>
+    </a>
+
+</form>
+
+
+{% if image %}
+    <h3>Uploaded Image</h3>
+    <img src="{{ url_for('static', filename='uploads/' + image) }}" width="250">
+
+    <h3>Prediction Result</h3>
+
+    <p><b>🍽 Food Name:</b> {{ food }}</p>
+    <p><b>🎯 Confidence:</b> {{ confidence }}%</p>
+
+    <hr>
+
+    <h3>🥗 Nutrition Information</h3>
+
+    <table border="1" cellpadding="8">
+        <tr>
+            <th>Nutrient</th>
+            <th>Value</th>
+        </tr>
+
+        <tr>
+            <td>Calories</td>
+            <td>{{ calories }} kcal</td>
+        </tr>
+
+        <tr>
+            <td>Protein</td>
+            <td>{{ protein }} g</td>
+        </tr>
+
+        <tr>
+            <td>Carbohydrates</td>
+            <td>{{ carbohydrates }} g</td>
+        </tr>
+
+        <tr>
+            <td>Fat</td>
+            <td>{{ fat }} g</td>
+        </tr>
+
+    </table>
+     <h3>🧂 Ingredients</h3>
+     <p>{{ ingredients }}</p>
+
+     <hr>
+     
+
+    <h3>📏 BMI Result</h3>
+
+    <table border="1" cellpadding="8">
+        <tr>
+            <td><b>BMI</b></td>
+            <td>{{ bmi }}</td>
+        </tr>
+
+        <tr>
+            <td><b>Status</b></td>
+            <td>{{ bmi_status }}</td>
+        </tr>
+    </table>
+
+     <h3>🥗 Diet Recommendation</h3>
+
+     <p>{{ recommendation }}</p>
+{% endif %}
+
+</body>
+</html>

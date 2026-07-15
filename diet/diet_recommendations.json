@@ -1,0 +1,161 @@
+{
+  "Biryani": {
+    "weight_loss": "Eat a small portion with salad and avoid soft drinks.",
+    "weight_gain": "Eat with boiled eggs, curd, and fruits.",
+    "muscle_gain": "Choose chicken biryani and add grilled chicken.",
+    "diabetes": "Limit rice quantity and include more vegetables.",
+    "heart_healthy": "Choose less oil and lean chicken."
+  },
+
+  "Chapathi": {
+    "weight_loss": "Eat 2 chapathis with vegetable curry.",
+    "weight_gain": "Eat with paneer curry and curd.",
+    "muscle_gain": "Add chicken or paneer for protein.",
+    "diabetes": "Choose whole wheat chapathi with dal.",
+    "heart_healthy": "Eat with less oil and green vegetables."
+  },
+
+  "Chola puri": {
+    "weight_loss": "Avoid frequently because it is fried.",
+    "weight_gain": "Can be eaten occasionally with curd.",
+    "muscle_gain": "Add boiled chickpeas for protein.",
+    "diabetes": "Limit intake due to high carbohydrates.",
+    "heart_healthy": "Avoid deep-fried puri."
+  },
+
+  "Dal - Curry": {
+    "weight_loss": "Excellent protein source with vegetables.",
+    "weight_gain": "Eat with rice and curd.",
+    "muscle_gain": "Very good protein-rich side dish.",
+    "diabetes": "Good option with controlled rice portions.",
+    "heart_healthy": "Excellent for heart health."
+  },
+
+  "Dosa": {
+    "weight_loss": "Eat plain dosa with sambar.",
+    "weight_gain": "Eat masala dosa with curd.",
+    "muscle_gain": "Add paneer or eggs.",
+    "diabetes": "Eat plain dosa in moderation.",
+    "heart_healthy": "Choose less oil."
+  },
+
+  "Gulab Jamun": {
+    "weight_loss": "Avoid due to high sugar.",
+    "weight_gain": "Eat occasionally as dessert.",
+    "muscle_gain": "Limit sweets and focus on protein.",
+    "diabetes": "Not recommended.",
+    "heart_healthy": "Avoid frequent consumption."
+  },
+
+  "Idly": {
+    "weight_loss": "Healthy breakfast with sambar.",
+    "weight_gain": "Eat 4-5 idlies with peanut chutney.",
+    "muscle_gain": "Add eggs or paneer.",
+    "diabetes": "Eat in moderation.",
+    "heart_healthy": "Low-fat healthy meal."
+  },
+
+  "Jalebi": {
+    "weight_loss": "Avoid sugary foods.",
+    "weight_gain": "Occasional dessert.",
+    "muscle_gain": "Limit sweets.",
+    "diabetes": "Not recommended.",
+    "heart_healthy": "Avoid."
+  },
+
+  "Kadai panner": {
+    "weight_loss": "Eat moderate portions.",
+    "weight_gain": "Excellent with chapathi.",
+    "muscle_gain": "High-protein food.",
+    "diabetes": "Good with vegetables.",
+    "heart_healthy": "Use low-fat paneer."
+  },
+
+  "Kheer": {
+    "weight_loss": "Avoid sugary desserts.",
+    "weight_gain": "Good energy source.",
+    "muscle_gain": "Limit sugar intake.",
+    "diabetes": "Not recommended.",
+    "heart_healthy": "Eat occasionally."
+  },
+
+  "Modak": {
+    "weight_loss": "Limit intake.",
+    "weight_gain": "Occasional snack.",
+    "muscle_gain": "Focus on protein instead.",
+    "diabetes": "Avoid.",
+    "heart_healthy": "Eat rarely."
+  },
+
+  "Pakoda": {
+    "weight_loss": "Avoid fried snacks.",
+    "weight_gain": "Eat occasionally.",
+    "muscle_gain": "Not ideal after workouts.",
+    "diabetes": "Limit intake.",
+    "heart_healthy": "Avoid deep-fried food."
+  },
+
+  "Pani puri": {
+    "weight_loss": "Eat occasionally.",
+    "weight_gain": "Not nutritious enough.",
+    "muscle_gain": "Choose protein-rich foods instead.",
+    "diabetes": "Limit intake.",
+    "heart_healthy": "Eat in moderation."
+  },
+
+  "Pavbhaji": {
+    "weight_loss": "Use less butter.",
+    "weight_gain": "Add extra butter and paneer.",
+    "muscle_gain": "Serve with paneer.",
+    "diabetes": "Limit pav quantity.",
+    "heart_healthy": "Reduce butter."
+  },
+
+  "Poha": {
+    "weight_loss": "Healthy breakfast with vegetables.",
+    "weight_gain": "Add peanuts and curd.",
+    "muscle_gain": "Add boiled eggs.",
+    "diabetes": "Good in moderate portions.",
+    "heart_healthy": "Healthy option."
+  },
+
+  "Rajma chawal": {
+    "weight_loss": "Reduce rice and increase rajma.",
+    "weight_gain": "Eat full portion with curd.",
+    "muscle_gain": "Excellent protein meal.",
+    "diabetes": "Limit rice quantity.",
+    "heart_healthy": "Healthy with brown rice."
+  },
+
+  "Rasmalai": {
+    "weight_loss": "Avoid sugary desserts.",
+    "weight_gain": "Occasional dessert.",
+    "muscle_gain": "Limit sweets.",
+    "diabetes": "Not recommended.",
+    "heart_healthy": "Eat rarely."
+  },
+
+  "Samosa": {
+    "weight_loss": "Avoid fried snacks.",
+    "weight_gain": "Occasional snack.",
+    "muscle_gain": "Choose healthier protein snacks.",
+    "diabetes": "Limit intake.",
+    "heart_healthy": "Avoid deep-fried food."
+  },
+
+  "Vada": {
+    "weight_loss": "Avoid fried foods.",
+    "weight_gain": "Eat occasionally.",
+    "muscle_gain": "Choose grilled protein instead.",
+    "diabetes": "Limit intake.",
+    "heart_healthy": "Avoid frequent consumption."
+  },
+
+  "Vada pav": {
+    "weight_loss": "Avoid due to high calories.",
+    "weight_gain": "Good energy meal occasionally.",
+    "muscle_gain": "Add protein-rich side dishes.",
+    "diabetes": "Not recommended frequently.",
+    "heart_healthy": "Reduce fried foods."
+  }
+}
