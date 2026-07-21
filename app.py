@@ -9,7 +9,11 @@ import json
 # -----------------------------
 # Load Model and Files
 # -----------------------------
-model = tf.keras.models.load_model("model/food_model.keras")
+@st.cache_resource
+def load_model():
+    return tf.keras.models.load_model("model/food_model.keras")
+
+model = load_model()
 
 with open("model/class_names.json", "r") as f:
     class_names = json.load(f)
@@ -77,10 +81,11 @@ if uploaded_file is not None:
 
         predicted_food, confidence = predict_food(img)
 
-        st.success(f"Predicted Food : {predicted_food}")
+        st.subheader("🍽 Prediction")
 
-        st.info(f"Confidence : {confidence:.2f}%")
+        st.success(f"Food: {predicted_food}")
 
+        st.metric("Confidence", f"{confidence:.2f}%")
         # -------------------------
         # Nutrition
         # -------------------------

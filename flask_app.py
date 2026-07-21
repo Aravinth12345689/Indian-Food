@@ -1,163 +1,133 @@
-from flask import Flask, render_template, request
+import streamlit as st
 import tensorflow as tf
 import numpy as np
 from tensorflow.keras.preprocessing import image
-import os
 import json
 import pandas as pd
-import streamlit as st
-  
-UPLOAD_FOLDER = "static/uploads"
-os.makedirs(UPLOAD_FOLDER, exist_ok=True)
+from PIL import Image
 
-app = Flask(__name__)
+# -----------------------------
+# Load Model and Files
+# -----------------------------
 model = tf.keras.models.load_model("model/food_model.keras")
+
 with open("model/class_names.json", "r") as f:
     class_names = json.load(f)
+
 nutrition_df = pd.read_csv("nutrition/nutrition.csv")
+
 with open("diet/diet_recommendations.json", "r") as f:
     diet_data = json.load(f)
 
-def predict_food(image_path):
-    img = image.load_img(image_path, target_size=(224, 224))
+
+# -----------------------------
+# Prediction Function
+# -----------------------------
+def predict_food(img):
+    img = img.resize((224, 224))
     img_array = image.img_to_array(img)
     img_array = np.expand_dims(img_array, axis=0)
-    
 
-    prediction = model.predict(img_array,verbose=0)
-    print(prediction[0])
-    print("Predicted Index:", np.argmax(prediction[0]))
-    print("Predicted Food:", class_names[np.argmax(prediction[0])])
-
-    predicted_index = np.argmax(prediction)
-    print("Predicted Index:", predicted_index)
-    print("Class Name:", class_names[predicted_index])
-
+    prediction = model.predict(img_array, verbose=0)
+    predicted_index = np.argmax(prediction[0])
     predicted_food = class_names[predicted_index]
     confidence = float(np.max(prediction[0]) * 100)
-
 
     return predicted_food, confidence
 
 
-@app.route("/", methods=["GET", "POST"])
-def index():
-    if request.method == "POST":
-        file = request.files["image"]
+def calculate_bmi(height_cm, weight_kg):
+    height_m = height_cm / 100
+    bmi = round(weight_kg / (height_m ** 2), 2)
 
-        if file:
-            upload_path = os.path.join(UPLOAD_FOLDER, file.filename)
-            file.save(upload_path)
-            diet_goal = request.form.get("diet_goal", "")
-            height = request.form.get("height", "")
-            weight = request.form.get("weight", "")
-            predicted_food, confidence = predict_food(upload_path)
-            bmi = None
-            bmi_status = ""
+    if bmi < 18.5:
+        status = "Underweight"
+    elif bmi < 25:
+        status = "Normal Weight"
+    elif bmi < 30:
+        status = "Overweight"
+    else:
+        status = "Obese"
 
-            if height and weight:
-                height = float(height) / 100   # Convert cm to meters
-                weight = float(weight)
+    return bmi, status
 
-                bmi = round(weight / (height * height), 2)
 
-                if bmi < 18.5:
-                    bmi_status = "Underweight"
-                elif bmi < 25:
-                    bmi_status = "Normal Weight"
-                elif bmi < 30:
-                    bmi_status = "Overweight"
-                else:
-                    bmi_status = "Obese"
-            print("Predicted Food =", repr(predicted_food))
-            print("Diet Goal =", repr(diet_goal))
-            print("JSON Keys =", list(diet_data.keys()))
+# -----------------------------
+# Streamlit UI
+# -----------------------------
+st.set_page_config(page_title="Indian Food Recognition", layout="wide")
 
-            print("Selected Diet Goal:", diet_goal)
-        
-            recommendation = "No recommendation available."
+st.title("🍛 Indian Food Recognition System")
+st.write("Upload a food image to predict the food and view nutrition details.")
 
-            food_key = predicted_food.strip().lower()
+uploaded_file = st.file_uploader("Upload Food Image", type=["jpg", "jpeg", "png"])
 
-            for key in diet_data:
-                if key.strip().lower() == food_key:
-                   if diet_goal in diet_data[key]:
-                      recommendation = diet_data[key][diet_goal]
-                   break
-            print("Predicted Food:", predicted_food)
-            print("Foods in CSV:", nutrition_df["Food"].tolist())
-            nutrition_data = nutrition_df[
-                nutrition_df["Food"]
-                .str.lower()
-                .str.strip()
-                .str.replace("-", "", regex=False)
-             ==
-            predicted_food.lower().strip().replace("-", "")
-            ]
-            if nutrition_data.empty:
-                calories = protein = carbohydrates = fat = "Not Available"
-                ingredients = "Not Available"
-            else:
-                 nutrition = nutrition_data.iloc[0]
-                 calories = nutrition["Calories"]
-                 protein = nutrition["Protein"]
-                 carbohydrates = nutrition["Carbohydrates"]
-                 fat = nutrition["Fat"]
-                 ingredients = nutrition["Ingredients"]
-            print("Predicted:", predicted_food)
-            print("Confidence:", confidence)
+diet_goal = st.selectbox(
+    "Select Diet Goal",
+    ["weight_loss", "weight_gain", "muscle_gain", "diabetes", "heart_healthy"]
+)
 
-            return render_template("index.html",
-               image=file.filename,
-               food=predicted_food,
-               confidence=round(confidence, 2),
-               calories=calories,
-               protein=protein,
-               carbohydrates=carbohydrates,
-               fat=fat,
-               ingredients=ingredients,
-               recommendation=recommendation,
-               bmi=bmi,
-               bmi_status=bmi_status
-               
-            )
+st.subheader("BMI Calculator")
+height = st.number_input("Height (cm)", min_value=1.0)
+weight = st.number_input("Weight (kg)", min_value=1.0)
 
-    return render_template("index.html")
+if uploaded_file is not None:
+    img = Image.open(uploaded_file)
+    st.image(img, width=300)
 
-@app.route("/bmi", methods=["GET", "POST"])
-def bmi():
-    if request.method == "POST":
-        height = float(request.form["height"]) / 100
-        weight = float(request.form["weight"])
+    if st.button("Predict Food"):
+        predicted_food, confidence = predict_food(img)
 
-        bmi = round(weight / (height * height), 2)
+        st.success(f"Predicted Food: {predicted_food}")
+        st.info(f"Confidence: {confidence:.2f}%")
 
-        if bmi < 18.5:
-            status = "Underweight"
-            recommendation = "Increase calorie and protein intake. Eat foods like Kadai Paneer, Rajma Chawal, Dal Curry, eggs, milk, and nuts."
+        # -------------------------
+        # Nutrition lookup
+        # -------------------------
+        nutrition_data = nutrition_df[
+            nutrition_df["Food"]
+            .str.lower()
+            .str.strip()
+            .str.replace("-", "", regex=False)
+            == predicted_food.lower().strip().replace("-", "")
+        ]
 
-        elif bmi < 25:
-            status = "Normal Weight"
-            recommendation = "Maintain a balanced diet. Continue eating healthy foods like Idly, Chapathi, Poha, Dal Curry, fruits, and vegetables."
-
-        elif bmi < 30:
-            status = "Overweight"
-            recommendation = "Reduce fried and high-calorie foods. Choose Idly, Poha, Chapathi, salads, and exercise regularly."
-
+        if nutrition_data.empty:
+            st.error("Nutrition data not available.")
         else:
-            status = "Obese"
-            recommendation = "Consult a healthcare professional. Focus on a low-calorie, high-fiber diet and regular physical activity."
+            nutrition = nutrition_data.iloc[0]
 
-        return render_template(
-            "bmi.html",
-            bmi=bmi,
-            status=status,
-            recommendation=recommendation
-        )
+            st.subheader("🥗 Nutrition")
+            st.write("Calories :", nutrition["Calories"])
+            st.write("Protein :", nutrition["Protein"])
+            st.write("Carbohydrates :", nutrition["Carbohydrates"])
+            st.write("Fat :", nutrition["Fat"])
 
-    return render_template("bmi.html")
+            if "Ingredients" in nutrition_df.columns:
+                st.subheader("🧂 Ingredients")
+                st.write(nutrition["Ingredients"])
 
-if __name__ == "__main__":
-    app.run(debug=True)
+        # -------------------------
+        # Diet Recommendation
+        # -------------------------
+        recommendation = "No recommendation available."
+        food_key = predicted_food.strip().lower()
 
-            
+        for key in diet_data:
+            if key.strip().lower() == food_key:
+                if diet_goal in diet_data[key]:
+                    recommendation = diet_data[key][diet_goal]
+                break
+
+        st.subheader("🥗 Diet Recommendation")
+        st.write(recommendation)
+
+        # -------------------------
+        # BMI
+        # -------------------------
+        if height > 0 and weight > 0:
+            bmi, status = calculate_bmi(height, weight)
+
+            st.subheader("💪 BMI Calculator")
+            st.write("BMI :", bmi)
+            st.write("Status :", status)
