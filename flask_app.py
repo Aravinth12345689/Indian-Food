@@ -5,7 +5,6 @@ from tensorflow.keras.preprocessing import image
 import os
 import json
 import pandas as pd
-import streamlit as st
   
 UPLOAD_FOLDER = "static/uploads"
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
