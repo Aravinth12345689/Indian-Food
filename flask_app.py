@@ -5,6 +5,9 @@ from tensorflow.keras.preprocessing import image
 import os
 import json
 import pandas as pd
+
+os.environ["TF_CPP_MIN_LOG_LEVEL"] = "3"
+os.environ["CUDA_VISIBLE_DEVICES"] = "-1"
   
 UPLOAD_FOLDER = "static/uploads"
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
