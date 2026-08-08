@@ -1,94 +1,244 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>BMI Calculator</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BMI Calculator</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --cream:#FBF1DE;
+    --paper:#FFFBF3;
+    --ink:#2B1B12;
+    --turmeric:#E0A526;
+    --chili:#C1440E;
+    --cardamom:#4B6043;
+    --line:#E4D6BC;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    background:var(--cream);
+    color:var(--ink);
+    font-family:'Inter',sans-serif;
+    line-height:1.5;
+    padding-bottom:60px;
+  }
+  header.top{
+    padding:28px 20px 22px;
+    background:var(--paper);
+    border-bottom:2px solid var(--ink);
+    position:relative;
+    overflow:hidden;
+  }
+  header.top::after{
+    content:"";
+    position:absolute;
+    right:-40px; top:-40px;
+    width:140px; height:140px;
+    border-radius:50%;
+    background:radial-gradient(circle at 30% 30%, var(--cardamom), var(--turmeric) 75%);
+    opacity:.9;
+  }
+  .eyebrow{
+    font-family:'IBM Plex Mono',monospace;
+    font-size:11px;
+    letter-spacing:.14em;
+    text-transform:uppercase;
+    color:var(--cardamom);
+    margin:0 0 8px;
+  }
+  h1{
+    font-family:'Fraunces',serif;
+    font-weight:600;
+    font-size:30px;
+    margin:0;
+    max-width:280px;
+    position:relative;
+    z-index:1;
+  }
+  main{
+    max-width:520px;
+    margin:0 auto;
+    padding:22px 18px 0;
+  }
+  .card{
+    background:var(--paper);
+    border:1.5px solid var(--ink);
+    border-radius:16px;
+    padding:22px;
+    margin-bottom:20px;
+    box-shadow:4px 4px 0 var(--ink);
+  }
+  .card h2{
+    font-family:'Fraunces',serif;
+    font-size:19px;
+    font-weight:600;
+    margin:0 0 16px;
+  }
+  label.field-label{
+    display:block;
+    font-size:12px;
+    font-weight:600;
+    text-transform:uppercase;
+    letter-spacing:.06em;
+    color:var(--ink);
+    opacity:.75;
+    margin:16px 0 6px;
+  }
+  label.field-label:first-of-type{margin-top:0;}
+  input[type="number"]{
+    width:100%;
+    font-family:'Inter',sans-serif;
+    font-size:15px;
+    padding:12px 14px;
+    border:1.5px solid var(--ink);
+    border-radius:10px;
+    background:var(--cream);
+    color:var(--ink);
+  }
+  input:focus{
+    outline:3px solid var(--turmeric);
+    outline-offset:1px;
+  }
+  .btn{
+    display:block;
+    width:100%;
+    text-align:center;
+    font-family:'Inter',sans-serif;
+    font-weight:700;
+    font-size:15px;
+    padding:15px 18px;
+    border-radius:10px;
+    border:1.5px solid var(--ink);
+    cursor:pointer;
+    margin-top:22px;
+    text-decoration:none;
+  }
+  .btn-primary{
+    background:var(--cardamom);
+    color:var(--paper);
+    box-shadow:3px 3px 0 var(--ink);
+  }
+  .btn-primary:active{ box-shadow:0 0 0 var(--ink); transform:translate(3px,3px); }
+  .btn-secondary{
+    background:var(--paper);
+    color:var(--ink);
+    margin-top:12px;
+  }
+  .divider{
+    display:flex;
+    align-items:center;
+    gap:8px;
+    margin:28px 0 18px;
+    color:var(--cardamom);
+    font-family:'IBM Plex Mono',monospace;
+    font-size:11px;
+    letter-spacing:.1em;
+    text-transform:uppercase;
+  }
+  .divider::before, .divider::after{
+    content:"";
+    flex:1;
+    height:0;
+    border-top:2px dotted var(--line);
+  }
+  .bmi-row{
+    display:flex;
+    gap:12px;
+  }
+  .bmi-stat{
+    flex:1;
+    text-align:center;
+    background:var(--cream);
+    border:1.5px solid var(--ink);
+    border-radius:10px;
+    padding:16px 8px;
+  }
+  .bmi-stat .num{
+    font-family:'Fraunces',serif;
+    font-size:26px;
+    font-weight:700;
+    display:block;
+  }
+  .bmi-stat .lbl{
+    font-family:'IBM Plex Mono',monospace;
+    font-size:10px;
+    text-transform:uppercase;
+    letter-spacing:.08em;
+    opacity:.7;
+  }
+  .rec-text{
+    font-size:14.5px;
+    background:var(--cream);
+    border-left:3px solid var(--chili);
+    padding:12px 14px;
+    border-radius:0 8px 8px 0;
+    margin:0;
+  }
+  footer{
+    text-align:center;
+    font-family:'IBM Plex Mono',monospace;
+    font-size:11px;
+    color:var(--ink);
+    opacity:.5;
+    padding:30px 0 10px;
+  }
+</style>
 </head>
 <body>
 
-<h2>📏 BMI Calculator</h2>
+<header class="top">
+  <p class="eyebrow">Thali &amp; Data</p>
+  <h1>BMI Calculator</h1>
+</header>
 
-<form method="POST">
+<main>
 
-    <label><b>Height (cm)</b></label><br>
-    <input type="number" name="height" placeholder="Enter Height" required>
+  <form method="POST">
+    <div class="card">
+      <h2>📏 Enter your details</h2>
 
-    <br><br>
+      <label class="field-label" for="height">Height (cm)</label>
+      <input type="number" id="height" name="height" placeholder="Enter height" required>
 
-    <label><b>Weight (kg)</b></label><br>
-    <input type="number" name="weight" placeholder="Enter Weight" required>
+      <label class="field-label" for="weight">Weight (kg)</label>
+      <input type="number" id="weight" name="weight" placeholder="Enter weight" required>
 
-    <br><br>
+      <button type="submit" class="btn btn-primary">Calculate BMI</button>
+    </div>
+  </form>
 
-    <button type="submit">Calculate BMI</button>
+  <a href="/" style="text-decoration:none;">
+    <div class="btn btn-secondary">← Back to Food Recognition</div>
+  </a>
 
-</form>
+  {% if bmi %}
+  <div class="divider">Result</div>
 
-{% if bmi %}
+  <div class="card">
+    <div class="bmi-row">
+      <div class="bmi-stat">
+        <span class="num">{{ bmi }}</span>
+        <span class="lbl">BMI</span>
+      </div>
+      <div class="bmi-stat">
+        <span class="num" style="font-size:16px;">{{ status }}</span>
+        <span class="lbl">Status</span>
+      </div>
+    </div>
+  </div>
 
-<hr>
+  <div class="card">
+    <h2>🥗 Recommendation</h2>
+    <p class="rec-text">{{ recommendation }}</p>
+  </div>
+  {% endif %}
 
-<h3>📊 BMI Result</h3>
+</main>
 
-<p><b>BMI:</b> {{ bmi }}</p>
-
-<p><b>Status:</b> {{ status }}</p>
-
-<hr>
-
-<h3>📈 BMI Health Meter</h3>
-
-<table border="1" cellpadding="8">
-    <tr>
-        <th>BMI Range</th>
-        <th>Health Status</th>
-    </tr>
-
-    <tr>
-        <td>Below 18.5</td>
-        <td>🔵 Underweight</td>
-    </tr>
-
-    <tr>
-        <td>18.5 - 24.9</td>
-        <td>🟢 Normal Weight</td>
-    </tr>
-
-    <tr>
-        <td>25 - 29.9</td>
-        <td>🟠 Overweight</td>
-    </tr>
-
-    <tr>
-        <td>30 and Above</td>
-        <td>🔴 Obese</td>
-    </tr>
-</table>
-
-<hr>
-
-<h3>🥗 BMI Recommendation</h3>
-
-<p>{{ recommendation }}</p>
-
-<hr>
-
-<h3>💡 Health Tips</h3>
-
-<ul>
-    <li>🥗 Eat a balanced diet rich in vegetables and fruits.</li>
-    <li>💧 Drink 2–3 litres of water every day.</li>
-    <li>🏃 Exercise for at least 30 minutes daily.</li>
-    <li>🍎 Limit sugary drinks and junk food.</li>
-    <li>😴 Sleep for 7–8 hours every night.</li>
-</ul>
-
-{% endif %}
-
-<br><br>
-
-<a href="/">
-    <button type="button">⬅ Back to Food Recognition</button>
-</a>
+<footer>made for home kitchens, one plate at a time</footer>
 
 </body>
 </html>

@@ -1,129 +1,388 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Indian Food Recognition</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Indian Food Recognition</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --cream:#FBF1DE;
+    --paper:#FFFBF3;
+    --ink:#2B1B12;
+    --turmeric:#E0A526;
+    --chili:#C1440E;
+    --cardamom:#4B6043;
+    --line:#E4D6BC;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    background:var(--cream);
+    color:var(--ink);
+    font-family:'Inter',sans-serif;
+    line-height:1.5;
+    padding-bottom:60px;
+  }
+  header.top{
+    padding:28px 20px 22px;
+    background:var(--paper);
+    border-bottom:2px solid var(--ink);
+    position:relative;
+    overflow:hidden;
+  }
+  header.top::after{
+    content:"";
+    position:absolute;
+    right:-40px; top:-40px;
+    width:140px; height:140px;
+    border-radius:50%;
+    background:radial-gradient(circle at 30% 30%, var(--turmeric), var(--chili) 75%);
+    opacity:.9;
+  }
+  .eyebrow{
+    font-family:'IBM Plex Mono',monospace;
+    font-size:11px;
+    letter-spacing:.14em;
+    text-transform:uppercase;
+    color:var(--chili);
+    margin:0 0 8px;
+  }
+  h1{
+    font-family:'Fraunces',serif;
+    font-weight:600;
+    font-size:32px;
+    margin:0;
+    max-width:280px;
+    position:relative;
+    z-index:1;
+  }
+  main{
+    max-width:520px;
+    margin:0 auto;
+    padding:22px 18px 0;
+  }
+  .card{
+    background:var(--paper);
+    border:1.5px solid var(--ink);
+    border-radius:16px;
+    padding:22px;
+    margin-bottom:20px;
+    box-shadow:4px 4px 0 var(--ink);
+  }
+  .card h2{
+    font-family:'Fraunces',serif;
+    font-size:19px;
+    font-weight:600;
+    margin:0 0 16px;
+    display:flex;
+    align-items:center;
+    gap:8px;
+  }
+  label.field-label{
+    display:block;
+    font-size:12px;
+    font-weight:600;
+    text-transform:uppercase;
+    letter-spacing:.06em;
+    color:var(--ink);
+    opacity:.75;
+    margin:16px 0 6px;
+  }
+  label.field-label:first-of-type{margin-top:0;}
+
+  input[type="file"]{
+    width:100%;
+    font-family:'Inter',sans-serif;
+    font-size:14px;
+    padding:12px;
+    border:1.5px dashed var(--ink);
+    border-radius:10px;
+    background:var(--cream);
+  }
+  select, input[type="number"]{
+    width:100%;
+    font-family:'Inter',sans-serif;
+    font-size:15px;
+    padding:12px 14px;
+    border:1.5px solid var(--ink);
+    border-radius:10px;
+    background:var(--cream);
+    color:var(--ink);
+    appearance:none;
+  }
+  select{
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='9'%3E%3Cpath d='M1 1l6 6 6-6' stroke='%232B1B12' stroke-width='2' fill='none'/%3E%3C/svg%3E");
+    background-repeat:no-repeat;
+    background-position:right 14px center;
+    padding-right:36px;
+  }
+  input:focus, select:focus{
+    outline:3px solid var(--turmeric);
+    outline-offset:1px;
+  }
+
+  .btn{
+    display:block;
+    width:100%;
+    text-align:center;
+    font-family:'Inter',sans-serif;
+    font-weight:700;
+    font-size:15px;
+    padding:15px 18px;
+    border-radius:10px;
+    border:1.5px solid var(--ink);
+    cursor:pointer;
+    margin-top:22px;
+    text-decoration:none;
+  }
+  .btn-primary{
+    background:var(--chili);
+    color:var(--paper);
+    box-shadow:3px 3px 0 var(--ink);
+  }
+  .btn-primary:active{ box-shadow:0 0 0 var(--ink); transform:translate(3px,3px); }
+  .btn-secondary{
+    background:var(--paper);
+    color:var(--ink);
+    margin-top:12px;
+  }
+
+  .divider{
+    display:flex;
+    align-items:center;
+    gap:8px;
+    margin:28px 0 18px;
+    color:var(--chili);
+    font-family:'IBM Plex Mono',monospace;
+    font-size:11px;
+    letter-spacing:.1em;
+    text-transform:uppercase;
+  }
+  .divider::before, .divider::after{
+    content:"";
+    flex:1;
+    height:0;
+    border-top:2px dotted var(--line);
+  }
+
+  .result-photo{
+    width:100%;
+    border-radius:12px;
+    border:1.5px solid var(--ink);
+    display:block;
+    margin-bottom:18px;
+  }
+
+  .prediction{
+    display:flex;
+    align-items:center;
+    gap:16px;
+    margin-bottom:4px;
+  }
+  .confidence-badge{
+    flex-shrink:0;
+    width:68px; height:68px;
+    border-radius:50%;
+    background:conic-gradient(var(--turmeric) calc(var(--pct,0) * 1%), var(--line) 0);
+    display:flex; align-items:center; justify-content:center;
+    position:relative;
+  }
+  .confidence-badge::before{
+    content:"";
+    position:absolute;
+    width:52px; height:52px;
+    border-radius:50%;
+    background:var(--paper);
+  }
+  .confidence-badge span{
+    position:relative;
+    font-family:'IBM Plex Mono',monospace;
+    font-weight:600;
+    font-size:13px;
+  }
+  .food-name{
+    font-family:'Fraunces',serif;
+    font-weight:700;
+    font-size:22px;
+    margin:0;
+  }
+  .food-sub{
+    font-family:'IBM Plex Mono',monospace;
+    font-size:11px;
+    text-transform:uppercase;
+    letter-spacing:.08em;
+    color:var(--cardamom);
+    margin:2px 0 0;
+  }
+
+  table.nutri{
+    width:100%;
+    border-collapse:collapse;
+    font-family:'IBM Plex Mono',monospace;
+    font-size:14px;
+    margin-top:6px;
+  }
+  table.nutri td{
+    padding:10px 4px;
+    border-bottom:1px solid var(--line);
+  }
+  table.nutri td:first-child{ color:var(--ink); opacity:.7; }
+  table.nutri td:last-child{ text-align:right; font-weight:600; }
+  table.nutri tr:last-child td{ border-bottom:none; }
+
+  .ingredients-text, .rec-text{
+    font-size:14.5px;
+    margin:0;
+  }
+  .rec-text{
+    background:var(--cream);
+    border-left:3px solid var(--cardamom);
+    padding:12px 14px;
+    border-radius:0 8px 8px 0;
+  }
+
+  .bmi-row{
+    display:flex;
+    gap:12px;
+  }
+  .bmi-stat{
+    flex:1;
+    text-align:center;
+    background:var(--cream);
+    border:1.5px solid var(--ink);
+    border-radius:10px;
+    padding:14px 8px;
+  }
+  .bmi-stat .num{
+    font-family:'Fraunces',serif;
+    font-size:24px;
+    font-weight:700;
+    display:block;
+  }
+  .bmi-stat .lbl{
+    font-family:'IBM Plex Mono',monospace;
+    font-size:10px;
+    text-transform:uppercase;
+    letter-spacing:.08em;
+    opacity:.7;
+  }
+
+  footer{
+    text-align:center;
+    font-family:'IBM Plex Mono',monospace;
+    font-size:11px;
+    color:var(--ink);
+    opacity:.5;
+    padding:30px 0 10px;
+  }
+</style>
 </head>
 <body>
 
-<h2>Indian Food Recognition</h2>
-<form method="POST" enctype="multipart/form-data">
+<header class="top">
+  <p class="eyebrow">Thali &amp; Data</p>
+  <h1>Indian Food Recognition</h1>
+</header>
 
-    <input type="file" name="image" required>
+<main>
 
-    <br><br>
+  <form method="POST" enctype="multipart/form-data">
+    <div class="card">
+      <h2>🍛 Upload a dish</h2>
 
-    <label><b>Select Feature</b></label>
+      <label class="field-label" for="image">Photo</label>
+      <input type="file" id="image" name="image" required>
 
-    <select name="feature" required>
+      <label class="field-label" for="feature">Select feature</label>
+      <select id="feature" name="feature" required>
         <option value="">-- Select Feature --</option>
         <option value="analysis">Food Analysis</option>
         <option value="diet">Diet Recommendation</option>
-    </select>
+      </select>
 
-
-    <br><br>
-    <label><b>Select Diet Goal</b></label>
-
-    <select name="diet_goal">
+      <label class="field-label" for="diet_goal">Select diet goal</label>
+      <select id="diet_goal" name="diet_goal">
         <option value="">-- Select Diet Goal --</option>
         <option value="weight_loss">Weight Loss</option>
         <option value="weight_gain">Weight Gain</option>
         <option value="muscle_gain">Muscle Gain</option>
         <option value="diabetes">Diabetes</option>
         <option value="heart_healthy">Heart Healthy</option>
-    </select>
-    <br><br>
+      </select>
 
-    <label><b>Height (cm)</b></label><br>
-    <input type="number" name="height" placeholder="Enter Height">
+      <label class="field-label" for="height">Height (cm)</label>
+      <input type="number" id="height" name="height" placeholder="Enter height">
 
-    <br><br>
+      <label class="field-label" for="weight">Weight (kg)</label>
+      <input type="number" id="weight" name="weight" placeholder="Enter weight">
 
-    <label><b>Weight (kg)</b></label><br>
-    <input type="number" name="weight" placeholder="Enter Weight">
+      <button type="submit" class="btn btn-primary">🔍 Predict</button>
+    </div>
+  </form>
 
+  <a href="/bmi" style="text-decoration:none;">
+    <div class="btn btn-secondary">📏 BMI Calculator</div>
+  </a>
 
+  {% if image %}
+  <div class="divider">Result</div>
 
-    <br><br>
+  <div class="card">
+    <img class="result-photo" src="{{ url_for('static', filename='uploads/' + image) }}" alt="Uploaded food photo">
 
-    <button type="submit">
-        🔍 predict
-    </button>
-    <br><br>
+    <div class="prediction">
+      <div class="confidence-badge" style="--pct:{{ confidence }};">
+        <span>{{ confidence }}%</span>
+      </div>
+      <div>
+        <p class="food-name">{{ food }}</p>
+        <p class="food-sub">Prediction confidence</p>
+      </div>
+    </div>
+  </div>
 
-    <a href="/bmi">
-        <button type="button">
-            📏 BMI Calculator
-        </button>
-    </a>
-
-</form>
-
-
-{% if image %}
-    <h3>Uploaded Image</h3>
-    <img src="{{ url_for('static', filename='uploads/' + image) }}" width="250">
-
-    <h3>Prediction Result</h3>
-
-    <p><b>🍽 Food Name:</b> {{ food }}</p>
-    <p><b>🎯 Confidence:</b> {{ confidence }}%</p>
-
-    <hr>
-
-    <h3>🥗 Nutrition Information</h3>
-
-    <table border="1" cellpadding="8">
-        <tr>
-            <th>Nutrient</th>
-            <th>Value</th>
-        </tr>
-
-        <tr>
-            <td>Calories</td>
-            <td>{{ calories }} kcal</td>
-        </tr>
-
-        <tr>
-            <td>Protein</td>
-            <td>{{ protein }} g</td>
-        </tr>
-
-        <tr>
-            <td>Carbohydrates</td>
-            <td>{{ carbohydrates }} g</td>
-        </tr>
-
-        <tr>
-            <td>Fat</td>
-            <td>{{ fat }} g</td>
-        </tr>
-
+  <div class="card">
+    <h2>🥗 Nutrition</h2>
+    <table class="nutri">
+      <tr><td>Calories</td><td>{{ calories }} kcal</td></tr>
+      <tr><td>Protein</td><td>{{ protein }} g</td></tr>
+      <tr><td>Carbohydrates</td><td>{{ carbohydrates }} g</td></tr>
+      <tr><td>Fat</td><td>{{ fat }} g</td></tr>
     </table>
-     <h3>🧂 Ingredients</h3>
-     <p>{{ ingredients }}</p>
+  </div>
 
-     <hr>
-     
+  <div class="card">
+    <h2>🧂 Ingredients</h2>
+    <p class="ingredients-text">{{ ingredients }}</p>
+  </div>
 
-    <h3>📏 BMI Result</h3>
+  {% if bmi %}
+  <div class="card">
+    <h2>📏 BMI</h2>
+    <div class="bmi-row">
+      <div class="bmi-stat">
+        <span class="num">{{ bmi }}</span>
+        <span class="lbl">BMI</span>
+      </div>
+      <div class="bmi-stat">
+        <span class="num" style="font-size:15px;">{{ bmi_status }}</span>
+        <span class="lbl">Status</span>
+      </div>
+    </div>
+  </div>
+  {% endif %}
 
-    <table border="1" cellpadding="8">
-        <tr>
-            <td><b>BMI</b></td>
-            <td>{{ bmi }}</td>
-        </tr>
+  <div class="card">
+    <h2>🍽 Diet Recommendation</h2>
+    <p class="rec-text">{{ recommendation }}</p>
+  </div>
+  {% endif %}
 
-        <tr>
-            <td><b>Status</b></td>
-            <td>{{ bmi_status }}</td>
-        </tr>
-    </table>
+</main>
 
-     <h3>🥗 Diet Recommendation</h3>
-
-     <p>{{ recommendation }}</p>
-{% endif %}
+<footer>made for home kitchens, one plate at a time</footer>
 
 </body>
 </html>
