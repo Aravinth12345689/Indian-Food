@@ -7,10 +7,8 @@ import json
 import pandas as pd
 
 try:
-    # Lightweight runtime (install: pip install tflite-runtime)
     import tflite_runtime.interpreter as tflite
 except ImportError:
-    # Fallback if only full tensorflow is installed
     import tensorflow.lite as tflite
 
 UPLOAD_FOLDER = "static/uploads"
@@ -18,7 +16,6 @@ os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 
 app = Flask(__name__)
 
-# Load TFLite model once at startup
 interpreter = tflite.Interpreter(model_path="model/food_model.tflite")
 interpreter.allocate_tensors()
 input_details = interpreter.get_input_details()
@@ -32,7 +29,6 @@ with open("diet/diet_recommendations.json", "r") as f:
 
 
 def predict_food(image_path):
-    # Load and preprocess image using PIL instead of keras.preprocessing
     img = Image.open(image_path).convert("RGB").resize((224, 224))
     img_array = np.array(img, dtype=np.float32)
     img_array = np.expand_dims(img_array, axis=0)
@@ -153,4 +149,3 @@ def bmi():
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 5000))
     app.run(host="0.0.0.0", port=port)
-    
